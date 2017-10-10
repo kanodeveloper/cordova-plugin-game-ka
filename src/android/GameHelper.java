@@ -51,8 +51,8 @@ public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
 
     static final String TAG = "GameHelper";
 	//
-	private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000 ;//  
-	
+	private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000 ;//
+
     /** Listener for sign-in success or failure events. */
     public interface GameHelperListener {
         /**
@@ -115,7 +115,7 @@ public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
     GoogleApiClient.Builder mGoogleApiClientBuilder = null;
 
     // Api options to use when adding each API, null for none
-    GamesOptions mGamesApiOptions = GamesOptions.builder().build();
+    GamesOptions mGamesApiOptions = GamesOptions.builder().setShowConnectingPopup(false).build();
     PlusOptions mPlusApiOptions = null;
     NoOptions mAppStateApiOptions = null;
 
@@ -316,22 +316,19 @@ public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
      *            The listener to be notified of sign-in events.
      */
     public void setup(GameHelperListener listener) {
-        if (mSetupDone) {
-            String error = "GameHelper: you cannot call GameHelper.setup() more than once!";
-            logError(error);
-            throw new IllegalStateException(error);
-        }
-        mListener = listener;
-        debugLog("Setup: requested clients: " + mRequestedClients);
+        if (!mSetupDone) {
+            mListener = listener;
+            debugLog("Setup: requested clients: " + mRequestedClients);
 
-        if (mGoogleApiClientBuilder == null) {
-            // we don't have a builder yet, so create one
-            createApiClientBuilder();
-        }
+            if (mGoogleApiClientBuilder == null) {
+                // we don't have a builder yet, so create one
+                createApiClientBuilder();
+            }
 
-        mGoogleApiClient = mGoogleApiClientBuilder.build();
-        mGoogleApiClientBuilder = null;
-        mSetupDone = true;
+            mGoogleApiClient = mGoogleApiClientBuilder.build();
+            mGoogleApiClientBuilder = null;
+            mSetupDone = true;
+        }
     }
 
     /**
@@ -908,7 +905,7 @@ public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
             GameHelperUtils.printMisconfiguredDebugInfo(mAppContext);
         }
 
-        showFailureDialog();
+        // showFailureDialog();
         mConnecting = false;
         notifyListener(false);
     }
@@ -968,17 +965,17 @@ public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
                 // Play services dialog
                 errorDialog = GooglePlayServicesUtil.getErrorDialog(errorCode,
                         activity, RC_UNUSED, null);
-*/                
+*/
         	    GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
         	    int res = googleAPI.isGooglePlayServicesAvailable(activity);
         	    if(res != ConnectionResult.SUCCESS) {
         	        if(googleAPI.isUserResolvableError(res)) {
                 	    errorDialog = googleAPI.getErrorDialog(activity, res, PLAY_SERVICES_RESOLUTION_REQUEST);
         	        }
-        	    }        	    
-      	    
+        	    }
+
                 if (errorDialog == null) {
-                	
+
                     // get fallback dialog
                     Log.e("GameHelper",
                             "No standard error dialog available. Making fallback dialog.");
@@ -988,7 +985,7 @@ public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
                                     GameHelperUtils.R_UNKNOWN_ERROR)
                                     + " "
                                     + GameHelperUtils.errorCodeToString(errorCode));
-                }                
+                }
         }
 
         errorDialog.show();

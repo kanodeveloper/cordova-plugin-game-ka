@@ -30,24 +30,26 @@
 
 - (void)setUp:(CDVInvokedUrlCommand *)command {
 
+    CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];
 }
 
 - (void)login:(CDVInvokedUrlCommand *)command {
-    
+
     //[self.commandDelegate runInBackground:^{//cranberrygame
         [[GKLocalPlayer localPlayer] setAuthenticateHandler: ^(UIViewController *viewcontroller, NSError *error) {
 /*
             //already logged in
             if ([GKLocalPlayer localPlayer].authenticated) {
-			
+
 				NSString *playerID = [GKLocalPlayer localPlayer].playerID;
 				NSString *displayName = [GKLocalPlayer localPlayer].displayName;
-				
+
 				NSDictionary* playerDetail = @{
 					@"playerId":playerID,
 					@"playerDisplayName":displayName
 				};
-						
+
 				CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:playerDetail];
 				//[pr setKeepCallbackAsBool:YES];
 				[self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];
@@ -62,7 +64,7 @@
             }
             else {
                 // Called the second time with result
-                if (error != nil) {	
+                if (error != nil) {
 					//CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
 					//[pr setKeepCallbackAsBool:YES];
 					//[self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];
@@ -73,18 +75,18 @@
                 else {
 					NSString *playerID = [GKLocalPlayer localPlayer].playerID;
 					NSString *displayName = [GKLocalPlayer localPlayer].displayName;
-					
+
 					NSDictionary* playerDetail = @{
 						@"playerId":playerID,
 						@"playerDisplayName":displayName
 					};
-							
-					CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:playerDetail];		
+
+					CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:playerDetail];
 					//[pr setKeepCallbackAsBool:YES];
 					[self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];
 					//CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
 					//[pr setKeepCallbackAsBool:YES];
-					//[self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];	
+					//[self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];
                 }
             }
 */
@@ -92,10 +94,10 @@
             //It turns out that you need to go to Settings>Game Center and manually enable Sandbox.
             //http://stackoverflow.com/questions/25916055/application-is-not-recognized-by-game-center-after-building-with-xcode-6-0-1
             if (viewcontroller != nil) {
-                
+
                 //UIAlertView *alert1 = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"1" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
                 //[alert1 show];
-                
+
                 CDVViewController *vc = (CDVViewController *)[super viewController];
                 [vc presentViewController:viewcontroller animated:YES completion:^{
                 }];
@@ -103,18 +105,18 @@
             else {
                 //already logged in
                 if ([GKLocalPlayer localPlayer].authenticated) {
-                    
+
                     //UIAlertView *alert2 = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"2" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
                     //[alert2 show];
-                    
-                    NSString *playerID = [GKLocalPlayer localPlayer].playerID;
-                    NSString *displayName = [GKLocalPlayer localPlayer].displayName;
-                    
+
+                    NSString *playerID = [GKLocalPlayer localPlayer].playerID ?: @"";
+                    NSString *displayName = [GKLocalPlayer localPlayer].displayName ?: @"";
+
                     NSDictionary* playerDetail = @{
                                                    @"playerId":playerID,
                                                    @"playerDisplayName":displayName
                                                    };
-                    
+
                     CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:playerDetail];
                     //[pr setKeepCallbackAsBool:YES];
                     [self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];
@@ -123,17 +125,17 @@
                     //[self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];
                 }
                 else {
-                    
+
                     //UIAlertView *alert3 = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"3" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
                     //[alert3 show];
-                    
+
                     // Called the second time with result
                     if (error != nil) {
-                        
-                        UIAlertView *alert4 = [[UIAlertView alloc] initWithTitle:@"Alert" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                        [alert4 show];
-                        
-                        
+
+                        // UIAlertView *alert4 = [[UIAlertView alloc] initWithTitle:@"Alert" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        // [alert4 show];
+
+
                         //CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
                         //[pr setKeepCallbackAsBool:YES];
                         //[self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];
@@ -142,14 +144,14 @@
                         [self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];
                     }
                     else {
-                        NSString *playerID = [GKLocalPlayer localPlayer].playerID;
-                        NSString *displayName = [GKLocalPlayer localPlayer].displayName;
-                        
+                        NSString *playerID = [GKLocalPlayer localPlayer].playerID ?: @"";
+                        NSString *displayName = [GKLocalPlayer localPlayer].displayName ?: @"";
+
                         NSDictionary* playerDetail = @{
                                                        @"playerId":playerID,
                                                        @"playerDisplayName":displayName
                                                        };
-                        
+
                         CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:playerDetail];
                         //[pr setKeepCallbackAsBool:YES];
                         [self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];
@@ -176,37 +178,37 @@
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *playerImageUrl = [documentsDirectory stringByAppendingPathComponent: @"user.jpg" ];
 
-    BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:playerImageUrl];    
+    BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:playerImageUrl];
     if(fileExists){
 		NSLog(@"%@", playerImageUrl);
-		
+
 		CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:playerImageUrl];
 		//[pr setKeepCallbackAsBool:YES];
 		[self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];
 		//CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
 		//[pr setKeepCallbackAsBool:YES];
-		//[self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];	
+		//[self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];
     }
     else{
 		GKLocalPlayer *localPlayer = [GKLocalPlayer localPlayer];
-        [localPlayer loadPhotoForSize:GKPhotoSizeSmall withCompletionHandler: ^(UIImage *photo, NSError *error) {            
+        [localPlayer loadPhotoForSize:GKPhotoSizeSmall withCompletionHandler: ^(UIImage *photo, NSError *error) {
             if (photo != nil)
             {
                 NSData* data = UIImageJPEGRepresentation(photo, 0.8);
                 [data writeToFile:playerImageUrl atomically:YES];
 				NSLog(@"%@", playerImageUrl);
-				
+
 				CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:playerImageUrl];
 				//[pr setKeepCallbackAsBool:YES];
 				[self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];
 				//CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
 				//[pr setKeepCallbackAsBool:YES];
-				//[self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];				
+				//[self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];
             }
             else if (error != nil)
             {
                 NSLog(@"%@", [error localizedDescription]);
-                
+
 				//CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
 				//[pr setKeepCallbackAsBool:YES];
 				//[self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];
@@ -220,14 +222,14 @@
 
 - (void)getPlayerScore:(CDVInvokedUrlCommand *)command {
  	NSString *leaderboardId = [command.arguments objectAtIndex:0];
-    
+
 	//http://stackoverflow.com/questions/21591123/how-to-get-local-player-score-from-game-center
 	GKLeaderboard *leaderboard = [[GKLeaderboard alloc] init];
   	leaderboard.identifier = leaderboardId;
 	[leaderboard loadScoresWithCompletionHandler: ^(NSArray *scores, NSError *error) {
 		if (error) {
 			NSLog(@"%@", error);
-			
+
 			//CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
 			//[pr setKeepCallbackAsBool:YES];
 			//[self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];
@@ -238,7 +240,7 @@
 		else if (scores) {
 			GKScore *s = leaderboard.localPlayerScore;
 			NSLog(@"Local player's score: %lld", s.value);
-			
+
             CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[NSString stringWithFormat:@"%lld", s.value]];
  			//[pr setKeepCallbackAsBool:YES];
 			[self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];
@@ -254,14 +256,14 @@
     //[self.commandDelegate runInBackground:^{//cranberrygame
 		NSString *leaderboardId = [command.arguments objectAtIndex:0];
         int64_t score = [[command.arguments objectAtIndex:1] integerValue];
-		
+
 		GKScore *s = [[GKScore alloc] initWithLeaderboardIdentifier: leaderboardId];
         s.value = score;
         s.context = 0;
-			
+
 		[GKScore reportScores:@[s] withCompletionHandler: ^(NSError *error) {
             if (error != nil)
-            {				
+            {
 				//CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
 				//[pr setKeepCallbackAsBool:YES];
 				//[self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];
@@ -299,19 +301,19 @@
 ///*
     //https://github.com/leecrossley/cordova-plugin-game-center/blob/master/src/ios/GameCenter.m
     NSString *leaderboardId = (NSString *) [command.arguments objectAtIndex:0];
-    
+
     GKGameCenterViewController *gameCenterController = [[GKGameCenterViewController alloc] init];
     if (gameCenterController != nil)
     {
         gameCenterController.gameCenterDelegate = self;
-        
+
         if (leaderboardId.length > 0)
         {
             gameCenterController.leaderboardIdentifier = leaderboardId;
         }
 
         gameCenterController.viewState = GKGameCenterViewControllerStateLeaderboards;
-        
+
         [self.viewController presentViewController:gameCenterController animated:YES completion:nil];
     }
     else
@@ -325,9 +327,9 @@
     if (gameCenterController != nil)
     {
         gameCenterController.gameCenterDelegate = self;
-        
+
         gameCenterController.viewState = GKGameCenterViewControllerStateLeaderboards;
-        
+
         [self.viewController presentViewController:gameCenterController animated:YES completion:nil];
     }
     else
@@ -338,12 +340,13 @@
 - (void)unlockAchievement:(CDVInvokedUrlCommand *)command {
     //[self.commandDelegate runInBackground:^{//cranberrygame
 		NSString *achievementId = [command.arguments objectAtIndex:0];
-				
+
 		GKAchievement *achievement = [[GKAchievement alloc] initWithIdentifier: achievementId];
 		if (achievement)
 		{
 			achievement.percentComplete = 100;
-			
+			achievement.showsCompletionBanner = YES;
+
 			[achievement reportAchievementWithCompletionHandler: ^(NSError *error)
 			{
 				 if (error != nil)
@@ -354,7 +357,7 @@
 					CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]];
 					//[pr setKeepCallbackAsBool:YES];
 					[self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];
-				} 
+				}
 				 else {
 					CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
 					//[pr setKeepCallbackAsBool:YES];
@@ -362,7 +365,7 @@
 					//CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
 					//[pr setKeepCallbackAsBool:YES];
 					//[self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];
-					
+
 
 				 }
 			}];
@@ -375,12 +378,12 @@
 		NSString *achievementId = [command.arguments objectAtIndex:0];
 		NSString *stepsOrPercent = [command.arguments objectAtIndex:1];
 		float stepsOrPercentFloat = [stepsOrPercent floatValue];
-				
+
 		GKAchievement *achievement = [[GKAchievement alloc] initWithIdentifier: achievementId];
 		if (achievement)
 		{
 			achievement.percentComplete = stepsOrPercentFloat;
-			
+
 			[achievement reportAchievementWithCompletionHandler: ^(NSError *error)
 			{
 				 if (error != nil)
@@ -391,7 +394,7 @@
 					CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]];
 					//[pr setKeepCallbackAsBool:YES];
 					[self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];
-				} 
+				}
 				 else {
 					CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
 					//[pr setKeepCallbackAsBool:YES];
@@ -399,7 +402,7 @@
 					//CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
 					//[pr setKeepCallbackAsBool:YES];
 					//[self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];
-					
+
 
 				 }
 			}];
@@ -425,22 +428,22 @@
     {
          if (error != nil)
          {
-			 
+
 			//CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
 			//[pr setKeepCallbackAsBool:YES];
 			//[self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];
 			CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]];
 			//[pr setKeepCallbackAsBool:YES];
-			[self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];			 
+			[self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];
          } else {
 			CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
 			//[pr setKeepCallbackAsBool:YES];
 			[self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];
 			//CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
 			//[pr setKeepCallbackAsBool:YES];
-			//[self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];				 
+			//[self.commandDelegate sendPluginResult:pr callbackId:command.callbackId];
          }
-	}];    
+	}];
 }
 
 //GKLeaderboardViewControllerDelegate
@@ -470,7 +473,7 @@
 - (void)dealloc {
     self.leaderboardController = nil;
     self.achievementsController = nil;
-    
+
     [super dealloc];
 }
 

@@ -1,9 +1,9 @@
 {
-  "name": "cordova-plugin-game",
-  "version": "1.0.120",
+  "name": "cordova-plugin-game-ka",
+  "version": "1.0.0",
   "description": "show leaderboard and achievements (google play game and game center, SDK)",
   "cordova": {
-    "id": "cordova-plugin-game",
+    "id": "cordova-plugin-game-ka",
     "platforms": [
       "android",
       "ios"
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cranberrygame/cordova-plugin-game.git"
+    "url": "git+https://github.com/cranberrygame/cordova-plugin-game-ka.git"
   },
   "keywords": [
     "cordova",
