@@ -43,8 +43,6 @@ import com.google.android.gms.games.multiplayer.Invitation;
 import com.google.android.gms.games.multiplayer.Multiplayer;
 import com.google.android.gms.games.multiplayer.turnbased.TurnBasedMatch;
 import com.google.android.gms.games.request.GameRequest;
-import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.Plus.PlusOptions;
 
 public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
@@ -116,7 +114,6 @@ public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
 
     // Api options to use when adding each API, null for none
     GamesOptions mGamesApiOptions = GamesOptions.builder().setShowConnectingPopup(false).build();
-    PlusOptions mPlusApiOptions = null;
     NoOptions mAppStateApiOptions = null;
 
     // Google API client object we manage.
@@ -257,15 +254,6 @@ public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
     }
 
     /**
-     * Sets the options to pass when setting up the Plus API. Call before
-     * setup().
-     */
-    public void setPlusApiOptions(PlusOptions options) {
-        doApiOptionsPreCheck();
-        mPlusApiOptions = options;
-    }
-
-    /**
      * Creates a GoogleApiClient.Builder for use with @link{#setup}. Normally,
      * you do not have to do this; use this method only if you need to make
      * nonstandard setup (e.g. adding extra scopes for other APIs) on the
@@ -285,11 +273,6 @@ public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
         if (0 != (mRequestedClients & CLIENT_GAMES)) {
             builder.addApi(Games.API, mGamesApiOptions);
             builder.addScope(Games.SCOPE_GAMES);
-        }
-
-        if (0 != (mRequestedClients & CLIENT_PLUS)) {
-            builder.addApi(Plus.API);
-            builder.addScope(Plus.SCOPE_PLUS_LOGIN);
         }
 
         //if (0 != (mRequestedClients & CLIENT_APPSTATE)) {//deprecated
@@ -536,13 +519,6 @@ public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
             // nothing to do
             debugLog("signOut: was already disconnected, ignoring.");
             return;
-        }
-
-        // for Plus, "signing out" means clearing the default account and
-        // then disconnecting
-        if (0 != (mRequestedClients & CLIENT_PLUS)) {
-            debugLog("Clearing default account on PlusClient.");
-            Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
         }
 
         // For the games client, signing out means calling signOut and
