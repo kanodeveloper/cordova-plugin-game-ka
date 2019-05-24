@@ -2,7 +2,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-plugin-game-ka"
-    version="1.0.4">
+    version="1.0.6">
 
     <name>Cordova Game plugin</name>
     <description>show leaderboard and achievements (google play game and game center, SDK)</description>
@@ -57,6 +57,13 @@
 
     <!-- ios -->
     <platform name="ios">
+
+        <config-file parent="UIRequiredDeviceCapabilities" target="*-Info.plist">
+            <array>
+                <string>gamekit</string>
+            </array>
+        </config-file>
+
         <config-file target="config.xml" parent="/*">
 		    <feature name="Game">
 		        <param name="ios-package" value="Game" />
@@ -66,12 +73,6 @@
 
         <header-file src="src/ios/Game.h" compiler-flags="-fno-objc-arc" />
         <source-file src="src/ios/Game.m" compiler-flags="-fno-objc-arc" />
-
-		<config-file parent="UIRequiredDeviceCapabilities" target="*-Info.plist">
-+            <array>
-+                <string>gamekit</string>
-+            </array>
-+        </config-file>
 
         <framework src="GameKit.framework" />
     </platform>
